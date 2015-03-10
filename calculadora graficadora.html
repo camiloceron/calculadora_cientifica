@@ -4,14 +4,74 @@
 	<title>calculadora básica</title>
   <link rel="stylesheet" type="text/css" href="estilo.css">
 
-	<script type="text/javascript">
+	<script type="text/javascript"> 
 
-  function concatenar(ope){     
-     document.getElementById("result").value = document.getElementById("result").value + ope;
+  function concatenar(ope){            
+
+      var cad = document.getElementById("result").value;
+      var car = cad.charAt(cad.length-1);  
+      
+      if(ope=='+'|| ope=='-'|| ope=='*' || ope=='/'){
+        if(car!='+'&& car!='-'&& car!='*'&& car!='/') document.getElementById("result").value = document.getElementById("result").value + ope;        
+      }
+      else document.getElementById("result").value = document.getElementById("result").value + ope;       
 
   }
-  function igual(){    
-    document.getElementById("result").value = eval(document.getElementById("result").value);
+
+  function igual(){  
+
+    var resultado = document.getElementById("result").value;
+
+    var cuad="";
+    for(var i=resultado.length;i>=0;i--)
+    {
+        var car = resultado.charAt(i);        
+
+        if(car=='^'){         
+         var ban=0;
+         var cont =0, cont2=0;
+          for(var j=i-1;j>=0 && ban==0;j--)
+          {            
+            car = resultado.charAt(j);            
+            if(car=='('){
+              cont = cont+1;
+            }
+            if(car==')')
+            {
+              cont2 = cont2+1;
+            }
+            if(cont==cont2) ban=1;
+
+            cuad = car+cuad;           
+          }
+        }
+    }
+  
+    for(var i=0; i<resultado.length;i++){
+      var car = resultado.charAt(i); 
+      if(car=='√'){ 
+        resultado = resultado.replace('√','Math.sqrt');
+      }
+      if(car=='S'){
+        resultado = resultado.replace('Sin','Math.sin');
+      }
+      if(car=='C'){
+        resultado = resultado.replace('Cos','Math.sin');
+      }
+      if(car=='T'){
+        resultado = resultado.replace('Tan','Math.sin');
+      }
+      if(car=='^'){
+        resultado = resultado.replace(cuad,'Math.pow(');
+          cuad=cuad+',2)';
+        resultado = resultado.replace('^2',cuad);
+      }
+    }
+
+    //alert(resultado);
+
+    document.getElementById("result").value = eval(resultado);
+    
  }
 
   function graficar(escala){
@@ -35,7 +95,7 @@
         ctx.translate(200,100);
         ctx.fillStyle = "#FF0000"; 
 
-        var cadena =  'Math.sin(X)';//document.getElementById("result").value;//'Math.sin(X)'
+        var cadena =  document.getElementById("result").value;//'Math.sin(X)'
         var res; 
         var y1=0, y2=0, x1=0, x2=0;
 
@@ -108,7 +168,7 @@
      <caption><h1>CALCULADORA</h1></caption>  
      <tr align="center" valign="middle">
       <td colspan="10">
-        <input type="text" id="result" disabled>         
+        <input type="text" id="result" >         
         </td>
      </tr>
     <tr>      
@@ -128,13 +188,15 @@
       <td align="center" onclick="concatenar('-')"><p>-</p></td> 
       <td align="center" onclick="concatenar('*')"><p>*</p></td> 
       <td align="center" onclick="concatenar('/')"><p>/</p></td> 
-      <td align="center" onclick="concatenar('√')"><img src="raiz.png"/></td> 
-      <td align="center" onclick="concatenar('Math.pow()')"><img src="xcuad.png"/></td> 
+      <td align="center" onclick="concatenar('√(')"><img src="raiz.png"/></td> 
+      <td align="center" onclick="concatenar('^2')"><img src="xcuad.png"/></td> 
       <td align="center" onclick="concatenar('X')"><img src="x.png"/></td> 
+      <td align="center" onclick="concatenar('(')"><p>(</p></td>
+      <td align="center" onclick="concatenar(')')"><p>)<p></td>
     <tr> 
-      <td align="center" onclick="concatenar('S')"><p>senx</p></td> 
-      <td align="center" onclick="concatenar('C')"><p>cosx</p></td> 
-      <td align="center" onclick="concatenar('T')"><p>tanx</p></td> 
+      <td align="center" onclick="concatenar('Sin(')"><p>senx</p></td> 
+      <td align="center" onclick="concatenar('Cos(')"><p>cosx</p></td> 
+      <td align="center" onclick="concatenar('Tan(')"><p>tanx</p></td> 
       <td align="center" colspan="3" onclick="igual()"><p>=</p></td> 
       <td colspan="2" align="center" onclick="reiniciar()" title="limpiar la memoria"><p>C</p></td>
       <td colspan="2" align="center" onclick="graficar(1)"><p>graficar</p></td>      
