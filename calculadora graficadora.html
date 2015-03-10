@@ -18,9 +18,9 @@
 
   }
 
-  function igual(){  
+  function igual(ig){  
 
-    var resultado = document.getElementById("result").value;
+    var resultado = document.getElementById("result").value;    
 
     var cuad="";
     for(var i=resultado.length;i>=0;i--)
@@ -46,7 +46,7 @@
           }
         }
     }
-  
+
     for(var i=0; i<resultado.length;i++){
       var car = resultado.charAt(i); 
       if(car=='√'){ 
@@ -56,10 +56,10 @@
         resultado = resultado.replace('Sin','Math.sin');
       }
       if(car=='C'){
-        resultado = resultado.replace('Cos','Math.sin');
+        resultado = resultado.replace('Cos','Math.cos');
       }
       if(car=='T'){
-        resultado = resultado.replace('Tan','Math.sin');
+        resultado = resultado.replace('Tan','Math.tan');
       }
       if(car=='^'){
         resultado = resultado.replace(cuad,'Math.pow(');
@@ -67,11 +67,10 @@
         resultado = resultado.replace('^2',cuad);
       }
     }
-
-    //alert(resultado);
-
-    document.getElementById("result").value = eval(resultado);
     
+    if(ig==1) document.getElementById("result").value = eval(resultado); 
+   
+    return resultado;   
  }
 
   function graficar(escala){
@@ -95,7 +94,8 @@
         ctx.translate(200,100);
         ctx.fillStyle = "#FF0000"; 
 
-        var cadena =  document.getElementById("result").value;//'Math.sin(X)'
+        var cadena=igual(0);// =  document.getElementById("result").value;//'Math.sin(X)'
+
         var res; 
         var y1=0, y2=0, x1=0, x2=0;
 
@@ -134,7 +134,7 @@
           cy2=cy2+1;
         }    
 
-        //dibujar funcion:
+        //dibujar funcion:        
         for(var i=-200; i<200; i+=0.25){                    
             res = cadena.replace("X",i);                             
             y1 = eval(res); 
@@ -197,7 +197,7 @@
       <td align="center" onclick="concatenar('Sin(')"><p>senx</p></td> 
       <td align="center" onclick="concatenar('Cos(')"><p>cosx</p></td> 
       <td align="center" onclick="concatenar('Tan(')"><p>tanx</p></td> 
-      <td align="center" colspan="3" onclick="igual()"><p>=</p></td> 
+      <td align="center" colspan="3" onclick="igual(1)"><p>=</p></td> 
       <td colspan="2" align="center" onclick="reiniciar()" title="limpiar la memoria"><p>C</p></td>
       <td colspan="2" align="center" onclick="graficar(1)"><p>graficar</p></td>      
     </tr>      
